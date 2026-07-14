@@ -52,7 +52,9 @@ class ParticipantController extends Controller
                 'is_verified' => false,
             ]);
             // Envia novo e-mail de verificação
-            SendParticipantVerificationEmail::dispatch($participant);
+            SendEventRegistrationEmail::dispatch($participant);
+
+            // SendParticipantVerificationEmail::dispatch($participant);
             return response()->json([
                 'message' => 'Dados atualizados. Verifique seu e-mail para receber o novo código de confirmação.',
                 'participant' => $participant

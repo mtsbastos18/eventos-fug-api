@@ -76,9 +76,9 @@
 
 <body>
     <div class="container">
-        <img src="https://vozesdors.com.br/eventos_api/storage/events/4.jpg"
+        <!-- <img src="https://vozesdors.com.br/eventos_api/storage/events/4.jpg"
             alt="{{ is_array($participant) ? (is_object($participant['event']) ? $participant['event']->title : (isset($participant['event']['title']) ? $participant['event']['title'] : '') ) : $participant->event->title }}"
-            class="banner">
+            class="banner"> -->
 
         <div class="header">
             <h1>Inscrição Cancelada</h1>
@@ -88,20 +88,22 @@
             <h2>Olá, {{ is_array($participant) ? $participant['name'] : $participant->name }}!</h2>
             <p>Sua inscrição no evento
                 <strong>{{ is_array($participant)
-                    ? (is_object($participant['event']) ? $participant['event']->title : (isset($participant['event']['title']) ? $participant['event']['title'] : ''))
-                    : $participant->event->title }}</strong>
-                foi cancelada.</p>
+    ? (is_object($participant['event']) ? $participant['event']->title : (isset($participant['event']['title']) ? $participant['event']['title'] : ''))
+    : $participant->event->title }}</strong>
+                foi cancelada.
+            </p>
 
             <div class="event-details">
                 <p><strong>📅 Data:</strong>
                     {{ is_array($participant)
-                        ? (is_object($participant['event']) && isset($participant['event']->date) ? $participant['event']->date->format('d/m/Y \à\s H:i') : (isset($participant['event']['date']) ? \Carbon\Carbon::parse($participant['event']['date'])->format('d/m/Y \à\s H:i') : '') )
-                        : $participant->event->date->format('d/m/Y \à\s H:i') }}
+    ? (is_object($participant['event']) && isset($participant['event']->date) ? $participant['event']->date->format('d/m/Y \à\s H:i') : (isset($participant['event']['date']) ? \Carbon\Carbon::parse($participant['event']['date'])->format('d/m/Y \à\s H:i') : ''))
+    : $participant->event->date->format('d/m/Y \à\s H:i') }}
                 </p>
                 <p><strong>📍 Local:</strong>
                     {{ is_array($participant)
-                        ? (is_object($participant['event']) ? $participant['event']->location : (isset($participant['event']['location']) ? $participant['event']['location'] : ''))
-                        : $participant->event->location }}</p>
+    ? (is_object($participant['event']) ? $participant['event']->location : (isset($participant['event']['location']) ? $participant['event']['location'] : ''))
+    : $participant->event->location }}
+                </p>
             </div>
 
             <p>Se você acredita que foi um erro ou gostaria de se reinscre ver, não hesite em nos contatar.</p>

@@ -8,10 +8,10 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
+            background-color: #842626;
             margin: 0;
             padding: 0;
-            color: #333333;
+            color: #842626;
         }
 
         .container {
@@ -24,7 +24,7 @@
         }
 
         .header {
-            background-color: #008744;
+            background-color: #842626;
             color: #ffffff;
             text-align: center;
             padding: 20px 0;
@@ -47,13 +47,13 @@
         }
 
         .content h2 {
-            color: #008744;
+            color: #ed7130;
             margin-top: 0;
         }
 
         .event-details {
             background-color: #f9f9f9;
-            border-left: 4px solid #008744;
+            border-left: 4px solid #ed7130;
             padding: 15px;
             margin: 20px 0;
             border-radius: 0 4px 4px 0;
@@ -76,8 +76,8 @@
 
 <body>
     <div class="container">
-        <img src="https://vozesdors.com.br/eventos_api/storage/events/4.jpg" alt="{{ $participant->event->title }}"
-            class="banner">
+        <!-- <img src="https://eventosfug.com.br/eventos_api/storage/fugnacional_cover.jpeg" alt="{{ $participant->event->title }}"
+            class="banner"> -->
 
         <div class="header">
             <h1>Inscrição Confirmada</h1>
