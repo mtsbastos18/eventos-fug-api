@@ -33,4 +33,29 @@ class Participant extends Model
     {
         return $this->belongsTo(Event::class);
     }
+
+    public function scopeSearch($query, ?string $search, ?string $filterType)
+    {
+        if (!$search) {
+            return $query;
+        }
+
+        $document = preg_replace('/\D/', '', $search);
+
+        return match ($filterType) {
+            'name' => $query->where('name', 'like', "%{$search}%"),
+            'email' => $query->where('email', 'like', "%{$search}%"),
+            'cpf' => $document !== ''
+                ? $query->where('document', 'like', "%{$document}%")
+                : $query->whereRaw('0 = 1'),
+            default => $query->where(function ($q) use ($search, $document) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+
+                if ($document !== '') {
+                    $q->orWhere('document', 'like', "%{$document}%");
+                }
+            }),
+        };
+    }
 }

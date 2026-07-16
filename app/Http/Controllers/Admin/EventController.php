@@ -102,9 +102,20 @@ class EventController extends Controller
         return response()->json(null, 204);
     }
 
-    public function participants(Event $event)
+    public function participants(Request $request, Event $event)
     {
-        return response()->json($event->participants);
+        $validated = $request->validate([
+            'search' => 'nullable|string|max:255',
+            'filter_type' => 'nullable|in:name,cpf,email',
+            'per_page' => 'nullable|integer|min:1|max:100',
+        ]);
+
+        $participants = $event->participants()
+            ->search($validated['search'] ?? null, $validated['filter_type'] ?? null)
+            ->latest()
+            ->paginate($validated['per_page'] ?? 10);
+
+        return response()->json($participants);
     }
 
     public function dashboard()
