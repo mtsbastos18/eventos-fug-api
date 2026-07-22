@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\EventController;
+use App\Http\Controllers\Admin\CheckinController;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\PublicEventController;
 use App\Http\Controllers\AuthController;
@@ -27,6 +28,10 @@ Route::middleware('auth:api')->prefix('admin')->group(function () {
 
     // Rota para deletar participante (protegida)
     Route::delete('/events/{event}/participants/{participant}', [ParticipantController::class, 'destroy']);
+
+    // Rotas de check-in (leitura de QR Code via câmera ou baixa manual)
+    Route::post('/events/{event}/checkin', [CheckinController::class, 'byToken']);
+    Route::post('/events/{event}/participants/{participant}/checkin', [CheckinController::class, 'byParticipant']);
 
     // Rota para exportar participantes em Excel
     Route::get('/events/{event}/participants/export', [ParticipantController::class, 'export']);

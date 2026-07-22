@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 
 class Participant extends Model
 {
@@ -20,13 +21,23 @@ class Participant extends Model
         'company',
         'position',
         'city',
+        'checkin_token',
+        'checked_in_at',
     ];
 
     protected function casts(): array
     {
         return [
             'is_verified' => 'boolean',
+            'checked_in_at' => 'datetime',
         ];
+    }
+
+    protected static function booted()
+    {
+        static::creating(function (Participant $participant) {
+            $participant->checkin_token ??= (string) Str::uuid();
+        });
     }
 
     public function event()

@@ -64,6 +64,23 @@
             font-size: 15px;
         }
 
+        .qrcode {
+            text-align: center;
+            margin: 25px 0;
+        }
+
+        .qrcode p {
+            font-size: 14px;
+            color: #555555;
+            margin-bottom: 10px;
+        }
+
+        .qrcode img {
+            display: inline-block;
+            border: 8px solid #f9f9f9;
+            border-radius: 8px;
+        }
+
         .footer {
             background-color: #f1f1f1;
             text-align: center;
@@ -91,6 +108,11 @@
             <div class="event-details">
                 <p><strong>📅 Data:</strong> {{ $participant->event->date->format('d/m/Y \à\s H:i') }}</p>
                 <p><strong>📍 Local:</strong> {{ $participant->event->location }}</p>
+            </div>
+
+            <div class="qrcode">
+                <p>Apresente o código abaixo na entrada do evento:</p>
+                <img src="{{ $message->embedData($qrCodePng, 'checkin-qrcode.png', 'image/png') }}" alt="QR Code de check-in" width="240" height="240">
             </div>
 
             <p>Prepare-se para uma experiência incrível. Caso tenha alguma dúvida, não hesite em nos contatar.</p>

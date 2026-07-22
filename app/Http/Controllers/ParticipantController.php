@@ -116,10 +116,7 @@ class ParticipantController extends Controller
             'verification_code' => null,
         ]);
 
-        // Dispara o job de confirmação final do evento
-        SendEventRegistrationEmail::dispatch($participant);
-
-        return response()->json(['message' => 'E-mail verificado com sucesso. Inscrição final confirmada e enviada para o e-mail!']);
+        return response()->json(['message' => 'E-mail verificado com sucesso.']);
     }
 
     public function destroy($eventId, $participantId)
