@@ -7,6 +7,8 @@ use App\Models\Event;
 use App\Models\Participant;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class CheckinController extends Controller
 {
@@ -33,15 +35,55 @@ class CheckinController extends Controller
     }
 
     /**
-     * Check-in manual, a partir da listagem de participantes.
+     * Check-in manual, a partir da listagem de participantes. Além de confirmar a
+     * entrada, permite corrigir os dados do participante numa única operação
+     * (modal de confirmação de entrada) — se o check-in já tiver sido feito por
+     * outra requisição concorrente, as edições são descartadas junto com ele.
      */
-    public function byParticipant(Event $event, Participant $participant): JsonResponse
+    public function byParticipant(Request $request, Event $event, Participant $participant): JsonResponse
     {
         if ((int) $participant->event_id !== (int) $event->id) {
             return response()->json(['message' => 'Participante não pertence a este evento.'], 404);
         }
 
-        return $this->confirmCheckin($participant);
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('participants')->where('event_id', $event->id)->ignore($participant->id),
+            ],
+            'phone' => 'required|string|max:20',
+            'document' => [
+                'required',
+                'string',
+                'max:20',
+                Rule::unique('participants')->where('event_id', $event->id)->ignore($participant->id),
+            ],
+            'company' => 'nullable|string|max:255',
+            'position' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+        ]);
+
+        return DB::transaction(function () use ($participant, $validated) {
+            $locked = Participant::whereKey($participant->id)->lockForUpdate()->firstOrFail();
+
+            if ($locked->checked_in_at !== null) {
+                return response()->json([
+                    'message' => 'Check-in já realizado.',
+                    'checked_in_at' => $locked->checked_in_at,
+                    'participant' => $locked,
+                ], 422);
+            }
+
+            $locked->update($validated + ['checked_in_at' => now()]);
+
+            return response()->json([
+                'message' => 'Check-in realizado com sucesso.',
+                'participant' => $locked,
+            ]);
+        });
     }
 
     private function confirmCheckin(Participant $participant): JsonResponse
