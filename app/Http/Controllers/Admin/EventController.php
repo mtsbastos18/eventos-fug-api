@@ -54,6 +54,10 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
+        $event->loadCount([
+            'participants as checkin_count' => fn ($query) => $query->whereNotNull('checked_in_at'),
+        ]);
+
         return response()->json($event);
     }
 
