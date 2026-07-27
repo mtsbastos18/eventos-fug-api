@@ -112,11 +112,16 @@ class EventController extends Controller
             'search' => 'nullable|string|max:255',
             'filter_type' => 'nullable|in:name,cpf,email',
             'per_page' => 'nullable|integer|min:1|max:100',
+            'order_by' => 'nullable|in:name,latest',
         ]);
 
         $participants = $event->participants()
             ->search($validated['search'] ?? null, $validated['filter_type'] ?? null)
-            ->latest()
+            ->when(
+                ($validated['order_by'] ?? 'latest') === 'name',
+                fn ($q) => $q->orderBy('name'),
+                fn ($q) => $q->latest(),
+            )
             ->paginate($validated['per_page'] ?? 10);
 
         return response()->json($participants);

@@ -86,6 +86,35 @@ class CheckinController extends Controller
         });
     }
 
+    /**
+     * Check-in em lote, sem edição de dados — usado pela emissão de etiquetas
+     * (toggle "Fazer check-in ao imprimir"). Participantes que já tinham
+     * check-in são apenas reportados em already_checked_in, sem erro.
+     */
+    public function bulkCheckin(Request $request, Event $event): JsonResponse
+    {
+        $validated = $request->validate([
+            'participant_ids' => 'required|array|min:1',
+            'participant_ids.*' => 'integer',
+        ]);
+
+        $participants = Participant::where('event_id', $event->id)
+            ->whereIn('id', $validated['participant_ids'])
+            ->get(['id', 'checked_in_at']);
+
+        $alreadyCheckedIn = $participants->whereNotNull('checked_in_at')->pluck('id')->values();
+        $toCheckIn = $participants->whereNull('checked_in_at')->pluck('id')->values();
+
+        if ($toCheckIn->isNotEmpty()) {
+            Participant::whereIn('id', $toCheckIn)->update(['checked_in_at' => now()]);
+        }
+
+        return response()->json([
+            'checked_in' => $toCheckIn,
+            'already_checked_in' => $alreadyCheckedIn,
+        ]);
+    }
+
     private function confirmCheckin(Participant $participant): JsonResponse
     {
         $affected = Participant::where('id', $participant->id)

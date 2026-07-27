@@ -32,6 +32,7 @@ Route::middleware('auth:api')->prefix('admin')->group(function () {
     // Rotas de check-in (leitura de QR Code via câmera ou baixa manual)
     Route::post('/events/{event}/checkin', [CheckinController::class, 'byToken']);
     Route::post('/events/{event}/participants/{participant}/checkin', [CheckinController::class, 'byParticipant']);
+    Route::post('/events/{event}/participants/checkin-bulk', [CheckinController::class, 'bulkCheckin']);
 
     // Rota para exportar participantes em Excel
     Route::get('/events/{event}/participants/export', [ParticipantController::class, 'export']);
