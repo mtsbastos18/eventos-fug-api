@@ -45,6 +45,11 @@ class Participant extends Model
         return $this->belongsTo(Event::class);
     }
 
+    public function certificate()
+    {
+        return $this->hasOne(Certificate::class);
+    }
+
     public function scopeSearch($query, ?string $search, ?string $filterType)
     {
         if (!$search) {

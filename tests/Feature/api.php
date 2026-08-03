@@ -48,7 +48,6 @@ Route::middleware('auth:api')->prefix('admin')->group(function () {
     // Matriz (template) do certificado de participação
     Route::get('/events/{event}/certificate-template', [CertificateTemplateController::class, 'show']);
     Route::post('/events/{event}/certificate-template', [CertificateTemplateController::class, 'store']);
-    Route::delete('/events/{event}/certificate-template', [CertificateTemplateController::class, 'destroy']);
     Route::post('/events/{event}/certificate-template/preview', [CertificateTemplateController::class, 'preview']);
     Route::post('/events/{event}/certificate-template/copy-from/{source}', [CertificateTemplateController::class, 'copyFrom']);
 

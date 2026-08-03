@@ -29,6 +29,7 @@ class EventController extends Controller
             'location' => 'required|string|max:255',
             'description' => 'nullable|string',
             'capacity' => 'required|integer|min:1',
+            'workload_hours' => 'nullable|integer|min:1|max:1000',
             'image' => 'nullable|image|max:5120',
         ]);
 
@@ -73,6 +74,7 @@ class EventController extends Controller
             'location' => 'sometimes|required|string|max:255',
             'description' => 'nullable|string',
             'capacity' => 'sometimes|required|integer|min:1',
+            'workload_hours' => 'nullable|integer|min:1|max:1000',
             'image' => 'nullable|image|max:5120',
         ]);
 

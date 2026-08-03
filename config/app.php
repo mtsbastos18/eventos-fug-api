@@ -56,6 +56,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Frontend Application URL
+    |--------------------------------------------------------------------------
+    |
+    | Base do site/painel Angular, usada para montar links absolutos em
+    | e-mails (ex.: link do certificado), já que o backend não os serve.
+    |
+    */
+
+    'frontend_url' => rtrim(env('FRONTEND_URL', 'http://localhost:4200'), '/'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |

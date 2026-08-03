@@ -18,6 +18,7 @@ class Event extends Model
         'location',
         'description',
         'capacity',
+        'workload_hours',
         'image_path',
     ];
 
@@ -56,5 +57,15 @@ class Event extends Model
     public function postDetail()
     {
         return $this->hasOne(EventPostDetail::class);
+    }
+
+    public function certificateTemplate()
+    {
+        return $this->hasOne(CertificateTemplate::class);
+    }
+
+    public function certificates()
+    {
+        return $this->hasMany(Certificate::class);
     }
 }
