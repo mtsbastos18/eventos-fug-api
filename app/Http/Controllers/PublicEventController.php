@@ -14,7 +14,8 @@ class PublicEventController extends Controller
     {
         // Retorna apenas eventos com data e hora maior ou igual ao momento atual no fuso horário do Brasil
         $nowBrazil = now()->setTimezone('America/Sao_Paulo')->subHours(5);
-        $events = Event::where('date', '>=', $nowBrazil)
+        $events = Event::notArchived()
+            ->where('date', '>=', $nowBrazil)
             ->orderBy('date', 'asc')
             ->get();
 
@@ -25,7 +26,8 @@ class PublicEventController extends Controller
     {
         // Retorna apenas eventos com data menor que hoje, ordenados pela data mais recente
         $nowBrazil = now()->setTimezone('America/Sao_Paulo')->subHours(5);
-        $events = Event::where('date', '<', $nowBrazil)
+        $events = Event::notArchived()
+            ->where('date', '<', $nowBrazil)
             ->orderBy('date', 'desc')
             ->get();
 

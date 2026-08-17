@@ -20,13 +20,15 @@ class Event extends Model
         'capacity',
         'workload_hours',
         'image_path',
+        'archived_at',
     ];
 
     protected $casts = [
         'date' => 'datetime',
+        'archived_at' => 'datetime',
     ];
 
-    protected $appends = ['image_url'];
+    protected $appends = ['image_url', 'is_archived'];
 
     protected static function booted()
     {
@@ -48,6 +50,21 @@ class Event extends Model
     public function getImageUrlAttribute()
     {
         return $this->image_path ? url('storage/' . $this->image_path) : null;
+    }
+
+    public function getIsArchivedAttribute(): bool
+    {
+        return $this->archived_at !== null;
+    }
+
+    public function scopeNotArchived($query)
+    {
+        return $query->whereNull('archived_at');
+    }
+
+    public function scopeArchived($query)
+    {
+        return $query->whereNotNull('archived_at');
     }
 
     public function participants()

@@ -27,6 +27,8 @@ Route::prefix('auth')->group(function () {
 Route::middleware('auth:api')->prefix('admin')->group(function () {
     Route::get('/events/dashboard', [EventController::class, 'dashboard']);
     Route::get('/events/{event}/participants', [EventController::class, 'participants']);
+    Route::post('/events/{event}/archive', [EventController::class, 'archive']);
+    Route::post('/events/{event}/unarchive', [EventController::class, 'unarchive']);
     Route::apiResource('events', EventController::class);
 
     // Rota para deletar participante (protegida)

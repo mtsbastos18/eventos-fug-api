@@ -6,15 +6,20 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Event;
+use Log;
 
 class EventController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Event::all());
+        $query = $request->boolean('archived')
+            ? Event::archived()
+            : Event::notArchived();
+
+        return response()->json($query->orderBy('date', 'desc')->get());
     }
 
     /**
@@ -56,7 +61,7 @@ class EventController extends Controller
     public function show(Event $event)
     {
         $event->loadCount([
-            'participants as checkin_count' => fn ($query) => $query->whereNotNull('checked_in_at'),
+            'participants as checkin_count' => fn($query) => $query->whereNotNull('checked_in_at'),
         ]);
 
         return response()->json($event);
@@ -96,6 +101,20 @@ class EventController extends Controller
         return response()->json($event);
     }
 
+    public function archive(Event $event)
+    {
+        Log::info('Archiving event: ' . $event->id);
+        Log::info('Current archived_at value: ' . now());
+        $event->update(['archived_at' => now()]);
+        return response()->json($event);
+    }
+
+    public function unarchive(Event $event)
+    {
+        $event->update(['archived_at' => null]);
+        return response()->json($event);
+    }
+
     /**
      * Remove the specified resource from storage.
      */
@@ -121,8 +140,8 @@ class EventController extends Controller
             ->search($validated['search'] ?? null, $validated['filter_type'] ?? null)
             ->when(
                 ($validated['order_by'] ?? 'latest') === 'name',
-                fn ($q) => $q->orderBy('name'),
-                fn ($q) => $q->latest(),
+                fn($q) => $q->orderBy('name'),
+                fn($q) => $q->latest(),
             )
             ->paginate($validated['per_page'] ?? 10);
 
