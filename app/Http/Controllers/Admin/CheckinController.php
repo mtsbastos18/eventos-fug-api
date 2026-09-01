@@ -64,6 +64,7 @@ class CheckinController extends Controller
             'company' => 'nullable|string|max:255',
             'position' => 'nullable|string|max:255',
             'city' => 'nullable|string|max:255',
+            'additional_info' => 'nullable|string|max:300',
         ]);
 
         return DB::transaction(function () use ($participant, $validated) {

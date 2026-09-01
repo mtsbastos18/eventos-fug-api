@@ -24,6 +24,7 @@ class ParticipantController extends Controller
             'company' => 'nullable|string|max:255',
             'position' => 'nullable|string|max:255',
             'city' => 'nullable|string|max:255',
+            'additional_info' => 'nullable|string|max:300',
         ]);
 
         $event = Event::findOrFail($validated['event_id']);
@@ -46,6 +47,7 @@ class ParticipantController extends Controller
                 'company' => $validated['company'],
                 'position' => $validated['position'],
                 'city' => $validated['city'],
+                'additional_info' => $validated['additional_info'],
                 // Não atualiza o document nem o event_id
                 // Gera novo código de verificação e marca como não verificado
                 'verification_code' => sprintf('%06d', mt_rand(100000, 999999)),

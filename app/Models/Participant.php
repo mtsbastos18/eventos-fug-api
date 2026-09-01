@@ -21,6 +21,7 @@ class Participant extends Model
         'company',
         'position',
         'city',
+        'additional_info',
         'checkin_token',
         'checked_in_at',
     ];

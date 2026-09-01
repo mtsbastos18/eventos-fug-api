@@ -26,7 +26,7 @@ class ParticipantsExport implements FromCollection, WithHeadings, ShouldAutoSize
     public function collection()
     {
         return Participant::where('event_id', $this->eventId)
-            ->select('name', 'email', 'phone', 'company', 'position', 'city', 'checked_in_at')
+            ->select('name', 'email', 'phone', 'company', 'position', 'city', 'additional_info', 'checked_in_at')
             ->get();
     }
 
@@ -42,6 +42,7 @@ class ParticipantsExport implements FromCollection, WithHeadings, ShouldAutoSize
             $participant->company,
             $participant->position,
             $participant->city,
+            $participant->additional_info,
             // Converte a data do banco para o valor numérico que o Excel entende como data
             $participant->checked_in_at ? Date::dateTimeToExcel(Carbon::parse($participant->checked_in_at)) : null,
         ];
@@ -53,8 +54,8 @@ class ParticipantsExport implements FromCollection, WithHeadings, ShouldAutoSize
     public function columnFormats(): array
     {
         return [
-            // A coluna 'G' corresponde ao 7º campo ('Data de Check-in')
-            'G' => 'dd/mm/yyyy hh:mm:ss',
+            // A coluna 'H' corresponde ao 8º campo ('Data de Check-in')
+            'H' => 'dd/mm/yyyy hh:mm:ss',
         ];
     }
 
@@ -67,6 +68,7 @@ class ParticipantsExport implements FromCollection, WithHeadings, ShouldAutoSize
             'Empresa',
             'Cargo',
             'Cidade',
+            'Informações Adicionais',
             'Data de Check-in',
         ];
     }
